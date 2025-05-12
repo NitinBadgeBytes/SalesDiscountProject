@@ -1,0 +1,92 @@
+_schema-version: "3.2"
+ID: SalesDiscountProject
+version: 0.0.1
+modules:
+- name: SalesDiscountProject-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: SalesDiscountProject-destination-service
+    parameters:
+      content-target: true
+  - name: SalesDiscountProject_html_repo_host
+    parameters:
+      service-key:
+        name: SalesDiscountProject_html_repo_host-key
+  - name: uaa_SalesDiscountProject
+    parameters:
+      service-key:
+        name: uaa_SalesDiscountProject-key
+  parameters:
+    content:
+      subaccount:
+        destinations:
+        - Name: salesdiscount_SalesDiscountProject_html_repo_host
+          ServiceInstanceName: SalesDiscountProject-html5-app-host-service
+          ServiceKeyName: SalesDiscountProject_html_repo_host-key
+          sap.cloud.service: salesdiscount
+        - Authentication: OAuth2UserTokenExchange
+          Name: salesdiscount_uaa_SalesDiscountProject
+          ServiceInstanceName: SalesDiscountProject-xsuaa-service
+          ServiceKeyName: uaa_SalesDiscountProject-key
+          sap.cloud.service: salesdiscount
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: SalesDiscountProject-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: SalesDiscountProject_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - salesDiscountSalesDiscountUI.zip
+      name: salesDiscountSalesDiscountUI
+      target-path: resources/
+- name: salesDiscountSalesDiscountUI
+  type: html5
+  path: SalesDiscountUI
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: SalesDiscountProject-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        subaccount:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: SalesDiscountProject-destination-service
+    service-plan: lite
+- name: SalesDiscountProject_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: SalesDiscountProject-html5-app-host-service
+    service-plan: app-host
+- name: uaa_SalesDiscountProject
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: SalesDiscountProject-xsuaa-service
+    service-plan: application
+parameters:
+  deploy_mode: html5-repo

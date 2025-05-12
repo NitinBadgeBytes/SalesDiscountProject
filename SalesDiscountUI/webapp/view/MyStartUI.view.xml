@@ -1,0 +1,33 @@
+<mvc:View controllerName="salesDiscount.SalesDiscountUI.controller.MyStartUI"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <App id="app">
+        <pages>
+            <Page title="Workflow Start UI">
+                <content>
+                    <VBox width="100%" direction="Column" class="sapUiTinyMargin">
+                        <!-- <items>
+                            <Text text="Initial Workflow Context:"/>
+                            <TextArea width="100%" value="{/initialContext}" rows="8" />
+                            <Button text="Start Workflow" press="startWorkflowInstance"/>
+                            <Text text="API Response:" class="sapUiSmallMarginTop"/>
+                            <TextArea width="100%" value="{/apiResponse}" rows="14"/>
+                        </items> -->
+
+                        <Label text = "Productitems"/>
+                        <Input value="" id="productitems" type="Number"  placeholder="Please Enter how many Product Items"></Input>
+                          <Label text = "Discount"/>
+                        <Input value="" id="discount" type="Number"  placeholder="Please Enter how much Discount you want"></Input>
+                    </VBox>
+                </content>
+                <footer>
+                  <Bar >
+                    <contentMiddle>
+                       <Button text="Submit" press="onSubmit"></Button>
+                    </contentMiddle>
+                  </Bar>
+                </footer>
+            </Page>
+        </pages>
+    </App>
+</mvc:View>
