@@ -10,6 +10,7 @@ sap.ui.define(
       "salesDiscount.SalesDiscountUI.controller.MyStartUI",
       {
         onInit: function () {
+          //Thgis is my First Changes
           this.getView().setModel(
             new sap.ui.model.json.JSONModel({
               initialContext: JSON.stringify(
